@@ -1,0 +1,3 @@
+kuvat/aloitus.jpg = Tiedoston avaaminen
+kuvat/paasivu.jpg = Ohjelman pääikkuna
+kuvat/virhe.jpg = Tiedosto ei aukea
