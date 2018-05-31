@@ -3,6 +3,7 @@
 =----------------------------------------
 =
 @https://trac.cc.jyu.fi/projects/ohj2ht/k2018/almailmo/trunk = Työ versionhallinnassa
+!https://tim.jyu.fi/view/kurssit/tie/ohj2/2017k/ht/almailmo = Suunnitelma TIMIssä
 =
 = <h3>Kuvat</h3>
 =
