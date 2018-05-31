@@ -5,7 +5,7 @@ kuvat/muokkaaTulos.png = tuloksen muokkausikkuna
 kuvat/tietoja.png = tietoikkuna
 kuvat/virhe.png = ikkuna, joka aukeaa kun yritetään tallentaa vääränlaista tietoa
 kuvat/poisto.png = ikkuna, joka aukeaa kun yritetääm poistaa tietoja
-
+=
 kuvat/aloitus.jpg = Tiedoston avaaminen
 kuvat/paasivu.jpg = Ohjelman pääikkuna
 kuvat/virhe.jpg = Tiedosto ei aukea
