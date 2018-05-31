@@ -1,5 +1,5 @@
 ﻿kuvat/aloitus.png = ikkuna jokaa aukeaa avatessa ohjelman
-kuvat/paaikkuna.png = ohjelman pääikkuna
+kuvat/Paaikkuna.png = ohjelman pääikkuna
 kuvat/muokkaaUrheilija.png = urheilijan tietojen muokkausikkuna
 kuvat/muokkaaTulos.png = tuloksen muokkausikkuna
 kuvat/tietoja.png = tietoikkuna
