@@ -1,4 +1,12 @@
-﻿kuvat/aloitus.png = ikkuna jokaa aukeaa avatessa ohjelman
+﻿=----------------------------------------
+= Ohjelmointi 2, 2017, vaihe 8.1
+=----------------------------------------
+=
+@https://trac.cc.jyu.fi/projects/ohj2ht/k2018/almailmo/trunk = Työ versionhallinnassa
+=
+= <h3>Kuvat</h3>
+=
+kuvat/aloitus.png = ikkuna jokaa aukeaa avatessa ohjelman
 kuvat/Paaikkuna.png = ohjelman pääikkuna
 kuvat/muokkaaUrheilija.png = urheilijan tietojen muokkausikkuna
 kuvat/muokkaaTulos.png = tuloksen muokkausikkuna
@@ -9,3 +17,22 @@ kuvat/posto.png = ikkuna, joka aukeaa kun yritetääm poistaa tietoja
 kuvat/aloitus.jpg = Tiedoston avaaminen
 kuvat/paasivu.jpg = Ohjelman pääikkuna
 kuvat/virhe.jpg = Tiedosto ei aukea
+=
+= <h3>Käyttöliittymän ulkoasu JavaFX:llä</h3>
+=
+src/fxTulos/Tulos.css = tyylitiedosto (ei vielä muutettu mitään)
+src/fxTulos/Tulos.java = ohjelman käynnistävä pääluokka
+src/fxTulos/TulosAloitusView.fxml
+src/fxTulos/TulosGUIController.java = ohjain joka käsittelee käyttöliittymästä tulevat tapahtumat
+src/fxTulos/TulosGUIView.fxml = varsinainen käyttöliittymä
+src/fxTulos/TulosMuokkaaUrheilijaView.fxml= urheilijan muokkausikkuna
+src/fxTulos/TulosMuokkaaTulosView.fxml= tulosten muokkausikkuna
+src/fxTulos/TulosTietojaView.fxml= paneli jossa ohjelman tiedot
+src/fxTulos/TulosVarmistusView.fxml = ikkuna, joka varmistaa tiedon poistamisen
+src/fxTulos/TulosVirheView.fxml = ikkuna, joka ilmoittaa virheellisestä tiedosta
+=
+= <h3>Muita tiedostoja</h3>
+=
+build.fxbuild
+.project = Eclipsen projekti
+.classpath = Eclipsen luokkapolku
