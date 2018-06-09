@@ -26,7 +26,7 @@ src/fxTulos/Tulos.java = ohjelman käynnistävä pääluokka
 src/fxTulos/TulosAloitusView.fxml
 src/fxTulos/TulosGUIController.java = ohjain joka käsittelee käyttöliittymästä tulevat tapahtumat
 src/fxTulos/TulosGUIView.fxml = varsinainen käyttöliittymä
-src/fxTulos/TulosMukkaaUrheilijaCotroller.java = kontrolleri urheilijan muokkausta varten
+src/fxTulos/TulosMu0kkaaUrheilijaCotroller.java = kontrolleri urheilijan muokkausta varten
 src/fxTulos/TulosMuokkaaUrheilijaView.fxml= urheilijan muokkausikkuna
 src/fxTulos/TulosMuokkaaTulosController.java = kontrolleri tulosten muokkausta varten
 src/fxTulos/TulosMuokkaTulosView.fxml= tulosten muokkausikkuna
