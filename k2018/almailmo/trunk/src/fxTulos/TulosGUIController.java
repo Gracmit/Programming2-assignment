@@ -67,30 +67,48 @@ public class TulosGUIController {
 
     @FXML
     void handleUusiTulos() {
-        ModalController.showModal(TulosGUIController.class.getResource("TulosMuokkaTulosView.fxml"), "Muokkaa Tulos", null, "");
+        TulosMuokkaaTulosController.avaaTulos("Uusi tulos");
+        
     }
 
     @FXML
     void handleMuokkaaTulos() {
-        ModalController.showModal(TulosGUIController.class.getResource("TulosMuokkaTulosView.fxml"), "Muokkaa Tulos", null, "");
+        TulosMuokkaaTulosController.avaaTulos("Muokkaa tulos");
     }
     
     @FXML
     void handleUusiUrheilija() {
-        ModalController.showModal(TulosMuokkaaUrheilijaController.class.getResource("TulosMuokkaaUrheilijaView.fxml"), "Muokkaa Urheilija", null, "");
+        TulosMuokkaaUrheilijaController.avaaUrheilija("Uusi urheilija");
     }
     
     @FXML
     void handleMuokkaaUrheilija() {
-        ModalController.showModal(TulosGUIController.class.getResource("TulosMuokkaaUrheilijaView.fxml"), "Muokkaa Tulos", null, "");
+        TulosMuokkaaUrheilijaController.avaaUrheilija("Muokkaa urheilija");
     }
     
+    @FXML
+    void handlePoistaUrheilija() {
+        poista();
+    }
+    
+    @FXML
+    void handlePoistaTulos() {
+        poista();
+    }
     /**
      * Tietojen tallennus
      *      
      */
      private void tallenna() {
          Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+     }
+     
+     private void poista() {
+         boolean vastaus = Dialogs.showQuestionDialog("Poisto?",
+                 "Poistetaanko varmasti?", "Kyllä", "Ei");
+         if(vastaus == true ) {
+             Dialogs.showMessageDialog("Poistetaan! Mutta ei osata vielä");
+         }
      }
      
      /**
