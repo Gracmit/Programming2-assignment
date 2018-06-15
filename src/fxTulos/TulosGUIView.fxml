@@ -57,6 +57,8 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleUusiUrheilija" text="Lisää uusi urheilija" />
                   <MenuItem mnemonicParsing="false" onAction="#handleUusiTulos" text="Lisää uusi tulos" />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePoistaUrheilija" text="Poista Urheilija" />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePoistaTulos" text="PoistaTulos" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">

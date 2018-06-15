@@ -41,6 +41,14 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Str
         Dialogs.showMessageDialog("Tallennetaan! Mutta ei vielä osata");
     }
     
+    /**
+     * Avaa tulostemuokkaus ikkunan
+     * @param otsikko muokkausikkunan otsikko 
+     */
+    public static void avaaTulos(String otsikko) {
+        ModalController.showModal(TulosMuokkaaTulosController.class.getResource("TulosMuokkaTulosView.fxml"), otsikko, null, "");
+    }
+    
     @Override
     public String getResult() {
         // TODO Auto-generated method stub

@@ -4,6 +4,9 @@
 =
 @https://svn.cc.jyu.fi/srv/svn/ohj2ht/k2018/almailmo/trunk = Työ versionhallinnassa
 !https://tim.jyu.fi/view/kurssit/tie/ohj2/2018k/ht/almailmo = Suunnitelma TIMIssä
+= <h3>Ajettava ohjelma</h3>
+=
+Tulos.jar = Ohjelman jarritiedosto
 =
 = <h3>Kuvat</h3>
 =
@@ -40,3 +43,4 @@ src/fxTulos/TulosVirheView.fxml = ikkuna, joka ilmoittaa virheellisestä tiedost
 build.fxbuild
 .project = Eclipsen projekti
 .classpath = Eclipsen luokkapolku
+build.xml

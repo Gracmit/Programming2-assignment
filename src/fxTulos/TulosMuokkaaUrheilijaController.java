@@ -41,6 +41,14 @@ public class TulosMuokkaaUrheilijaController implements ModalControllerInterface
     void handleTallenna() {
         Dialogs.showMessageDialog("Tallennetaan! Mutta ei osata vielä");
     }
+    
+    /**
+     * avaa urheilijan muokkausikkunan
+     * @param otsikko muokkausikkunan otsikko
+     */
+    public static void avaaUrheilija(String otsikko) {
+        ModalController.showModal(TulosMuokkaaUrheilijaController.class.getResource("TulosMuokkaaUrheilijaView.fxml"), otsikko, null, "");
+    }
 
     @Override
     public String getResult() {
