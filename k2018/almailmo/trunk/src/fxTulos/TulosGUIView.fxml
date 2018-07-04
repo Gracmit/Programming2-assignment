@@ -76,7 +76,7 @@
             <VBox BorderPane.alignment="TOP_CENTER">
                <children>
                   <Label text="Label" />
-                  <ListChooser onMouseClicked="#handleMuokkaaUrheilija" rivit="Meikäläinen Matti&#10;Bolt Usain&#10;Farah Mo&#10;" />
+                  <ListChooser fx:id="chooserUrheilija" onMouseClicked="#handleMuokkaaUrheilija" rivit="Meikäläinen Matti&#10;Bolt Usain&#10;Farah Mo&#10;" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -109,7 +109,7 @@
       </BorderPane>
    </left>
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <top>
             <Label text="Urheilijan Tiedot" BorderPane.alignment="CENTER">
                <BorderPane.margin>
@@ -118,12 +118,12 @@
             </Label>
          </top>
          <center>
-            <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="panelUrheilija" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
                   <GridPane hgap="5.0">
                     <columnConstraints>
-                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="56.80004882812501" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.5999755859375" minWidth="10.0" prefWidth="195.199951171875" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

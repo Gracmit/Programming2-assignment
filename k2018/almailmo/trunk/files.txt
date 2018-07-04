@@ -23,6 +23,21 @@ kuvat/aloitus.jpg = Tiedoston avaaminen
 kuvat/paasivu.jpg = Ohjelman pääikkuna
 kuvat/virhe.jpg = Tiedosto ei aukea
 =
+= <h3>Tietorakenteiden käsittely</h3>
+=
+src/Tulos/Aika.java
+src/Tulos/Ajat.java
+src/Tulos/Matka.java
+src/Tulos/Matkat.java
+src/Tulos/Urheilija.java
+src/Tulos/Urheilijat.java
+src/Tulos/Rekisteri.java
+src/Tulos/Aika.java
+=
+= <h3>Tietokanta - Luokat</h3>
+=
+src/kanta/SotuTarkistus
+=
 = <h3>Käyttöliittymän ulkoasu JavaFX:llä</h3>
 =
 src/fxTulos/Tulos.css = tyylitiedosto (ei vielä muutettu mitään)
