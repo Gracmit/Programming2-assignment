@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="C:/MyTemp/Ohj2/jar/fxgui.jar"/>
 	<classpathentry kind="lib" path="C:/MyTemp/Ohj2/jar/Graphics.jar"/>
 	<classpathentry kind="lib" path="C:/MyTemp/Ohj2/jar/Music.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
