@@ -25,18 +25,17 @@ kuvat/virhe.jpg = Tiedosto ei aukea
 =
 = <h3>Tietorakenteiden käsittely</h3>
 =
-src/Tulos/Aika.java
-src/Tulos/Ajat.java
-src/Tulos/Matka.java
-src/Tulos/Matkat.java
-src/Tulos/Urheilija.java
-src/Tulos/Urheilijat.java
-src/Tulos/Rekisteri.java
-src/Tulos/Aika.java
+src/Tulos/Aika.java = Aika-luokka
+src/Tulos/Ajat.java = Ajat-luokka
+src/Tulos/Matka.java = Matka-luokka
+src/Tulos/Matkat.java = Matkat-luokka
+src/Tulos/Urheilija.java = Urheilija-luokka
+src/Tulos/Urheilijat.java = Urheilijat-luokka
+src/Tulos/Rekisteri.java = Rekisteri-luokka
 =
 = <h3>Tietokanta - Luokat</h3>
 =
-src/kanta/SotuTarkistus
+src/kanta/SotuTarkistus = Luokka sotun tarkastusta varten
 =
 = <h3>Käyttöliittymän ulkoasu JavaFX:llä</h3>
 =
