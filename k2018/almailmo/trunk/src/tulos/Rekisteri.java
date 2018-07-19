@@ -1,5 +1,6 @@
 package tulos;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -9,9 +10,9 @@ import java.util.List;
  */
 public class Rekisteri {
     
-    private final Urheilijat urheilijat = new Urheilijat();
-    // private final Matkat matkat = new Matkat();
-    private final Ajat ajat = new Ajat();
+    private Urheilijat urheilijat = new Urheilijat();
+    private Matkat matkat = new Matkat();
+    private Ajat ajat = new Ajat();
     
     
     /**
@@ -68,6 +69,88 @@ public class Rekisteri {
      */
     public Urheilija annaUrheilija(int i) {
         return urheilijat.anna(i);
+    }
+    
+    
+    /**
+     * Asettaa tiedostojen perusnimet
+     * @param nimi uusi nimi
+     */
+    public void setTiedosto(String nimi) {
+        File dir = new File(nimi);
+        dir.mkdir();
+        String hakemistonNimi = "";
+        if ( !nimi.isEmpty()) hakemistonNimi = nimi + "/";
+        urheilijat.setTiedostonPerusNimi(hakemistonNimi + "urheilijat");
+        matkat.setTiedostonPerusNimi(hakemistonNimi + "matkat");
+        ajat.setTiedostonPerusNimi(hakemistonNimi + "tulokset");
+        
+    }
+    
+    
+    /**
+     * Lukee rekisterin tiedot tiedostosta
+     * @param nimi tiedoston nimi
+     * @throws SailoException jos lukeminen ep‰onnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.*;
+     * #import java.util.*;
+     * 
+     * Rekisteri rekisteri = new Rekisteri();
+     * 
+     * Urheilija vaiski1 = new Urheilija(); vaiski1.taytaUrheilijaTiedot(); vaiski1.rekisteroi();
+     * Urheilija vaiski2 = new Urheilija(); vaiski2.taytaUrheilijaTiedot(); vaiski2.rekisteroi();
+     * Aika aika1 = new Aika(vaiski1.getId()); aika1.taytaAikaTiedot;
+     * Aika aika2 = new Aika(vaiski1.getId()); aika2.taytaAikaTiedot;
+     * Aika aika3 = new Aika(vaiski1.getId()); aika3.taytaAikaTiedot;
+     * Aika aika4 = new Aika(vaiski2.getId()); aika4.taytaAikaTiedot;
+     * Aika aika5 = new Aika(vaiski2.getId()); aika5.taytaAikaTiedot;
+     * 
+     * String hakemisto = "testitulos";
+     * File dir = new File(hakemisto);
+     * 
+     * 
+     */
+    public void lueTiedostosta(String nimi) throws SailoException {
+        urheilijat = new Urheilijat();
+        ajat = new Ajat();
+        matkat = new Matkat();
+        
+        setTiedosto(nimi);
+        urheilijat.lueTiedostosta();
+        ajat.lueTiedostosta();
+        matkat.lueTiedostosta();
+        
+    }
+    
+    
+    /**
+     * Tallennetaan rekisterin tiedot tiedostoon.
+     * Vaikka, jokin tallennus ep‰onnistuu, yritet‰‰n tallentaa muut ennen poikkeuksen heitt‰mist‰
+     * @throws SailoException Jos tallennus ep‰onnistuu
+     */
+    public void tallenna() throws SailoException {
+        String virhe = "";
+        try {
+            urheilijat.tallenna();
+        } catch (SailoException ex) {
+            virhe = ex.getMessage();
+            System.out.println(virhe);
+        }
+        
+        try {
+            ajat.tallenna();
+        } catch (SailoException ex) {
+            virhe = ex.getMessage();
+        }
+        
+        try {
+            matkat.tallenna();
+        } catch (SailoException ex) {
+            virhe = ex.getMessage();
+        }
     }
     
     

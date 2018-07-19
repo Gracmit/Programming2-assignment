@@ -3,6 +3,8 @@ package tulos;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 import static kanta.SotuTarkistus.*;
 
 /**
@@ -57,6 +59,36 @@ public class Aika {
     
     
     /**
+     * Lukee ajan tiedot merkkijonosta
+     * @param rivi merkkijono, josta luetaan
+     * @example
+     * <pre name="test">
+     *   Aika aika = new Aika();
+     *   aika.parse("   3  |  2   | 4");
+     *   aika.getId() === 3;
+     *   aika.toString().startsWith("3|2|4|") === true; 
+     *
+     *   aika.rekisteroi();
+     *   int n = aika.getId();
+     *   aika.parse(""+(n+20));      
+     *   aika.rekisteroi();          
+     *   aika.getId() === n+20;
+     *     
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setId(Mjonot.erota(sb, '|', id));
+        urheilijaId = Mjonot.erota(sb, '|', urheilijaId);
+        matkaId = Mjonot.erota(sb, '|', matkaId);
+        h = Mjonot.erota(sb, '|', h);
+        min = Mjonot.erota(sb, '|', min);
+        s = Mjonot.erota(sb, '|', s);
+        pvm = Mjonot.erota(sb, '|', pvm);
+    }
+    
+    
+    /**
      * Antaa ajalle seuraavan rekisterinumeron
      * TODO: PARANNA METODIA TIEDOSTONLUKUA VARTEN!!
      * @example
@@ -76,7 +108,15 @@ public class Aika {
         if (id != 0) return;
         id = seuraavaId;
         seuraavaId++;
-        
+    }
+    
+    /**
+     * Asettaa id:n ajalle ja pit‰‰ huolen ett‰ seuraavaId on aina suurempi kuin t‰h‰n menness‰ suurin id
+     * @param nro joka asetetaan
+     */
+    public void setId(int nro) {
+        id = nro;
+        if (seuraavaId <= id) seuraavaId = id + 1;
     }
     
     
@@ -122,6 +162,22 @@ public class Aika {
     public void tulosta(PrintStream out) {
         out.println("matkan id: " + matkaId +  " Aika: " + h + ":" + String.format("%02d", min) + ":" + String.format("%05.2f", s));
         out.println("Pvm: " + pvm);
+    }
+    
+    
+    /** 
+     * Palauttaa j‰senen tiedot merkkijonona
+     * @example
+     * <pre name="test">
+     * Aika aika = new Aika();
+     * aika.parse("   3  |  2   | 4");
+     * aika.toString().startsWith("3|2|4|") === true; 
+     * </pre>
+     */
+    @Override
+    public String toString() {
+        return id + "|" + urheilijaId + "|" + matkaId + "|" + h + "|" + min + "|" + s + "|" + pvm;  
+        
     }
     
     

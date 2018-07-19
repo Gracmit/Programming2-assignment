@@ -2,6 +2,7 @@ package tulos;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import fi.jyu.mit.ohj2.Mjonot;
 import static kanta.SotuTarkistus.*;
 
 /**
@@ -37,6 +38,36 @@ public class Urheilija {
         this.puhelin = "0404040404";
     }    
     
+    
+    /**
+     * Selvitt‰‰ urheilijan tiedot | erotellusta merkkijonosta
+     * Pit‰‰ huolen ett‰ seuraavaId on suurempi kuin tuleva id
+     * @param rivi josta urheilijan tiedot otetaan
+     * @example
+     * <pre name="test">
+     *   Urheilija urheilija = new Urheilija();
+     *   urheilija.parse("   3  |  Vemmels‰‰ri V‰iski   | 030201-111C");
+     *   urheilija.getId() === 3;
+     *   urheilija.toString().startsWith("3|Vemmels‰‰ri V‰iski|030201-111C|") === true; 
+     *
+     *   urheilija.rekisteroi();
+     *   int n = urheilija.getId();
+     *   urheilija.parse(""+(n+20));      
+     *   urheilija.rekisteroi();          
+     *   urheilija.getId() === n+20;
+     *     
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setId(Mjonot.erota(sb, '|', id));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        sotu = Mjonot.erota(sb, '|', sotu);
+        seura = Mjonot.erota(sb, '|', seura);
+        lisenssi = Mjonot.erota(sb, '|', lisenssi);
+        puhelin = Mjonot.erota(sb, '|', puhelin);
+    }
+    
     /**
      * Antaa urheilijalle seuraavan rekisterinumeron
      * TODO: PARANNA METODIA TIEDOSTONLUKUA VARTEN!!
@@ -57,6 +88,15 @@ public class Urheilija {
         if( getId() != 0) return;
         id = seuraavaId;
         seuraavaId++;
+    }
+    
+    
+    /**Asettaa tunnusnumeron ja samalla varmistaa ett‰ seuraava numero on aina suurempi kuin t‰h‰n menness‰ suurin
+     * @param nro asetettava id
+     */
+    public void setId(int nro) {
+        id = nro;
+        if (id >= seuraavaId) seuraavaId = id + 1;
     }
     
     
@@ -91,6 +131,21 @@ public class Urheilija {
     public void tulosta(PrintStream out) {
         out.println(String.format("%03d", id) + " " + nimi + " " + sotu);
         out.println(" " + seura + " " + lisenssi + " " + puhelin);
+    }
+    
+    /** 
+     * Palauttaa j‰senen tiedot merkkijonona
+     * @example
+     * <pre name="test">
+     * Urheilija urheilija = new Urheilija();
+     * urheilija.parse("   3  |  Vemmels‰‰ri V‰iski   | 030201-111C");
+     * urheilija.toString().startsWith("3|Vemmels‰‰ri V‰iski|030201-111C|") === true; 
+     * </pre>
+     */
+    @Override
+    public String toString() {
+        return id + "|" + nimi + "|" + sotu + "|" + seura + "|" + lisenssi + "|" + puhelin;  
+        
     }
 
     /**
