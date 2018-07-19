@@ -13,7 +13,7 @@ import javafx.fxml.FXMLLoader;
  * @version 28.5.2018
  *
  */
-public class Tulos extends Application {
+public class TulosMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -33,6 +33,8 @@ public class Tulos extends Application {
 			tulosCtrl.setRekisteri(rekisteri);
 			
 			primaryStage.show();
+			
+			tulosCtrl.avaa();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
