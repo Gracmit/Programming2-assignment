@@ -22,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import tulos.Aika;
 import tulos.Rekisteri;
+import tulos.SailoException;
 import tulos.Urheilija;
 
 /**
@@ -142,12 +143,40 @@ public class TulosGUIController implements Initializable {
     }
     
     
+    private String lueTiedosto(String nimi) {
+        try {
+            rekisteri.lueTiedostosta(nimi);
+            hae(0);
+            return null;
+        } catch (SailoException e) {
+            String virhe = e.getMessage();
+            if (virhe != null) Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
+            
+    }
+    
+    
+    /**
+     * Luetaan tiedosto
+     */
+    protected void avaa() {
+        lueTiedosto("tulosrekisteri");
+    }
+    
+    
     /**
      * Tietojen tallennus
-     *      
+     * @return null jos onnistuu, muuten virhe tekstinä
      */
-     private void tallenna() {
-         Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+     private String tallenna() {
+         try {
+             rekisteri.tallenna();
+             return null;
+         } catch (SailoException ex) {
+             Dialogs.showMessageDialog("Tallennuksessa ongelmia! " + ex.getMessage());
+             return ex.getMessage();
+         }
      }
      
      private void poista() {
