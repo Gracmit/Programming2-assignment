@@ -3,6 +3,8 @@ package tulos;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * Tulosrekisterin matka, joka osaa itse huolehtia esim. omasta id numerosta
  * @author Aleksi Ilmonen
@@ -40,6 +42,41 @@ public class Matka {
     }
     
     
+    /**Asettaa tunnusnumeron ja samalla varmistaa ett‰ seuraava numero on aina suurempi kuin t‰h‰n menness‰ suurin
+     * @param nro asetettava id
+     */
+    public void setId(int nro) {
+        id = nro;
+        if (id >= seuraavaId) seuraavaId = id + 1;
+    }
+    
+    
+    /**
+     * Selvitt‰‰ matkan tiedot | erotellusta merkkijonosta
+     * Pit‰‰ huolen ett‰ seuraavaId on suurempi kuin tuleva id
+     * @param rivi josta matkan tiedot otetaan
+     * @example
+     * <pre name="test">
+     *   Matka matka = new Matka();
+     *   matka.parse("   3  |  100m");
+     *   matka.getId() === 3;
+     *   matka.toString().equals("3|100m") === true; 
+     *
+     *   matka.rekisteroi();
+     *   int n = matka.getId();
+     *   matka.parse(""+(n+20));      
+     *   matka.rekisteroi();          
+     *   matka.getId() === n+20;
+     *     
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setId(Mjonot.erota(sb, '|', id));
+        juoksuMatka = Mjonot.erota(sb, '|', juoksuMatka);
+    }
+    
+    
     /**
      * Apumetodi, jolla saadaan t‰ytetty‰ testiarvot matkalle.
      * V‰liaikainen!
@@ -73,6 +110,22 @@ public class Matka {
      */
     public int getId() {
         return id;
+    }
+    
+    
+    /** 
+     * Palauttaa j‰senen tiedot merkkijonona
+     * @example
+     * <pre name="test">
+     * Matka matka = new Matka();
+     * matka.parse("   3  |  100m ");
+     * matka.toString().equals("3|100m") === true;  
+     * </pre>
+     */
+    @Override
+    public String toString() {
+        return id + "|" + juoksuMatka;
+        
     }
 
     /**
