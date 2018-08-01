@@ -9,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 
 
 /**
- * @author aleks
+ * @author Aleksi Ilmonen
  * @version 28.5.2018
  *
  */

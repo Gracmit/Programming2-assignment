@@ -10,8 +10,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxTulos.TulosMuokkaaTulosController">
+<BorderPane stylesheets="@Tulos.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxTulos.TulosMuokkaaTulosController">
    <top>
       <Label text="Tuloksen tiedot" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -19,33 +20,6 @@
          </BorderPane.margin>
       </Label>
    </top>
-   <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Urheilijan nimi" />
-            <Label text="Matka" GridPane.rowIndex="1" />
-            <Label text="Päivänmäärä" GridPane.rowIndex="3" />
-            <Label text="Aika" GridPane.rowIndex="2" />
-            <TextField fx:id="textNimi" GridPane.columnIndex="1" />
-            <TextField fx:id="textAika" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="textPvm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBoxChooser fx:id="chooserMatka" prefWidth="200.0" rivit="100m&#10;200m&#10;400m&#10;800m&#10;3000m&#10;5000m&#10;10000m&#10;puoli marathon&#10;marathon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
@@ -67,4 +41,37 @@
          </children>
       </HBox>
    </bottom>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane fx:id="gridAika">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Urheilijan nimi" />
+                  <Label text="Matka" GridPane.rowIndex="1" />
+                  <Label text="Päivänmäärä" GridPane.rowIndex="3" />
+                  <Label text="Aika" GridPane.rowIndex="2" />
+                  <TextField fx:id="textNimi" GridPane.columnIndex="1" />
+                  <TextField fx:id="textAika" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="textPvm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <ComboBoxChooser fx:id="chooserMatka" prefWidth="200.0" rivit="100m&#10;200m&#10;400m&#10;800m&#10;3000m&#10;5000m&#10;10000m&#10;puoli marathon&#10;marathon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <Label fx:id="labelVirhe" alignment="CENTER">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

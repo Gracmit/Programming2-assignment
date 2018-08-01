@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -113,10 +114,10 @@ public class Matkat implements Iterable<Matka> {
      *  matkat.tallenna();
      *  matkat = new Matkat();            // Poistetaan vanhat luomalla uusi
      *  matkat.lueTiedostosta(tiedNimi);  // johon ladataan tiedot tiedostosta.
-     *  //Iterator<Matka> i = matkat.iterator();
-     *  //i.next() === matka1;
-     *  //i.next() === matka2;
-     *  //i.hasNext() === false;
+     *  Iterator<Matka> i = matkat.iterator();
+     *  i.next() === matka1;
+     *  i.next() === matka2;
+     *  i.hasNext() === false;
      *  matkat.lisaa(matka2);
      *  matkat.tallenna();
      *  ftied.delete() === true;
@@ -212,6 +213,15 @@ public class Matkat implements Iterable<Matka> {
      */
     public int getLkm() {
         return alkiot.size();
+    }
+    
+    
+    /**
+     * Palauttaa alkiot
+     * @return alkiot
+     */
+    public List<Matka> getMatkat() {
+        return alkiot;
     }
     
     
