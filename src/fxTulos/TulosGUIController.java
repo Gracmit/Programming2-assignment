@@ -9,18 +9,21 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
-import fi.jyu.mit.fxgui.TextAreaOutputStream;
+import fi.jyu.mit.fxgui.StringGrid;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
+import javafx.scene.layout.GridPane;
 import tulos.Aika;
+import tulos.Matka;
 import tulos.Rekisteri;
 import tulos.SailoException;
 import tulos.Urheilija;
@@ -31,7 +34,7 @@ import tulos.Urheilija;
  *
  */
 public class TulosGUIController implements Initializable {
-    @FXML private TextField texthaku;
+    @FXML private TextField textHaku;
     @FXML private TextField textNimi;
     @FXML private TextField textHetu;
     @FXML private TextField textSeura;
@@ -39,7 +42,11 @@ public class TulosGUIController implements Initializable {
     @FXML private TextField textPuhelin; 
     @FXML private ListChooser<Urheilija> chooserUrheilija;
     @FXML private ScrollPane panelUrheilija;
-
+    @FXML private GridPane  gridUrheilija;
+    @FXML private StringGrid<Aika> tableAika;
+    @FXML private ComboBoxChooser<String> cbHaku;
+    @FXML private ComboBoxChooser<Matka> cbMatkat;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -60,7 +67,7 @@ public class TulosGUIController implements Initializable {
 
     @FXML
     void handleHaku() {
-        Dialogs.showMessageDialog("Haetaan! Mutta ei toimi viel‰");
+        hae(0);
     }
 
     @FXML
@@ -97,18 +104,18 @@ public class TulosGUIController implements Initializable {
 
     @FXML
     void handleMuokkaaTulos() {
-        TulosMuokkaaTulosController.avaaTulos("Muokkaa tulos");
+        muokkaaAika();
     }
     
     @FXML
     void handleUusiUrheilija() {
-        // TulosMuokkaaUrheilijaController.avaaUrheilija("Uusi urheilija");
         uusiUrheilija();
     }
     
     @FXML
     void handleMuokkaaUrheilija() {
-        //TulosMuokkaaUrheilijaController.avaaUrheilija("Muokkaa urheilija");
+        muokkaaUrheilija(kentta);
+        
     }
     
     @FXML
@@ -125,8 +132,11 @@ public class TulosGUIController implements Initializable {
     //===================================================================================
     
     private Rekisteri rekisteri;
-    private TextArea areaUrheilija = new TextArea();
     private Urheilija urheilijaKohdalla;
+    private TextField[] texts;
+    private int kentta = 0;
+    private static Aika apuAika = new Aika();
+    private static Urheilija apuUrheilija = new Urheilija();
     
     /**
      * Tekee tarvittavat alustukset.
@@ -134,21 +144,74 @@ public class TulosGUIController implements Initializable {
      * Alustaa myˆs urheilijalistan kuuntelijan
      */
     private void alusta() {
-        panelUrheilija.setContent(areaUrheilija);
-        areaUrheilija.setFont(new Font("Courier New", 14));
-        panelUrheilija.setFitToHeight(true);
         chooserUrheilija.clear();
         chooserUrheilija.addSelectionListener(e -> naytaUrheilija());
+        texts = TulosMuokkaaUrheilijaController.luoKentat(gridUrheilija);
+        for(TextField text : texts) {
+            if(text != null ) {
+                text.setOnMouseClicked(e -> {if (e.getClickCount() > 1 ) muokkaaUrheilija(TulosMuokkaaUrheilijaController.getFieldId(e.getSource(),0)); });
+                text.focusedProperty().addListener((a,o,n) -> kentta = TulosMuokkaaUrheilijaController.getFieldId(text,0));
+            }
+        }
         
+        cbHaku.clear();
+        for (int k = apuUrheilija.ekaKentta(); k < apuUrheilija.getKenttia(); k++) {
+            cbHaku.add(apuUrheilija.getKysymys(k), null);
+        }
+        cbHaku.setSelectedIndex(0);
+        
+        cbMatkat.addSelectionListener(e -> naytaUrheilija());
+        
+        // harrastusten alustus
+        int eka = apuAika.ekaKentta();
+        int lkm = apuAika.getKenttia();
+        String[] headings = new String[lkm - eka]; 
+        for(int i = 0, k = eka; k<lkm; i++, k++) {
+            headings[i] = apuAika.getKysymys(k);
+        }
+        tableAika.initTable(headings);
+        tableAika.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        tableAika.setEditable(false);
+        tableAika.setPlaceholder(new Label("Ei viel‰ tuloksia"));
+        tableAika.setColumnSortOrderNumber(1);
+        tableAika.setColumnSortOrderNumber(2);
+        tableAika.setColumnWidth(1, 60);
+        tableAika.setColumnWidth(2, 60);
+        
+        tableAika.setOnMouseClicked(e -> { if(e.getClickCount() > 1) muokkaaAika();} );
     }
     
     
+    /**
+     * Alustaa ComboBoxChooserin matkoilla
+     * @param cb alustettava ComboBoxChooser
+     * @return Alustettu ComboBoxChooser
+     */
+    public ComboBoxChooser<Matka> alustaMatkat(ComboBoxChooser<Matka> cb) {
+        cb.clear();
+        List<Matka> matkat = rekisteri.getMatkat();
+        for(int i = 0; i < rekisteri.getMatkaLkm(); i++) {
+            cb.add(matkat.get(i).getMatka(), matkat.get(i));
+        }
+        cb.setSelectedIndex(0);
+        return cb;
+    }
+    
+    
+    /**
+     * Lukee tiedostosta tiedot
+     * @param nimi tiedoston nimi
+     * @return virhe, jos tulee ongelmia
+     */
     private String lueTiedosto(String nimi) {
         try {
             rekisteri.lueTiedostosta(nimi);
             hae(0);
+            cbMatkat = alustaMatkat(cbMatkat);
             return null;
         } catch (SailoException e) {
+            hae(0);
+            cbMatkat = alustaMatkat(cbMatkat);
             String virhe = e.getMessage();
             if (virhe != null) Dialogs.showMessageDialog(virhe);
             return virhe;
@@ -179,6 +242,10 @@ public class TulosGUIController implements Initializable {
          }
      }
      
+     
+     /**
+      * Poistetaan tietoja
+      */
      private void poista() {
          boolean vastaus = Dialogs.showQuestionDialog("Poisto?",
                  "Poistetaanko varmasti?", "Kyll‰", "Ei");
@@ -218,38 +285,120 @@ public class TulosGUIController implements Initializable {
       */
      private void naytaUrheilija() {
          urheilijaKohdalla = chooserUrheilija.getSelectedObject();
-         if (urheilijaKohdalla == null) return;
-         areaUrheilija.setText("");
-         
-         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaUrheilija)) {
-             tulosta(os, urheilijaKohdalla);
-         }
+         TulosMuokkaaUrheilijaController.naytaUrheilija(urheilijaKohdalla, texts);
+         naytaAjat(urheilijaKohdalla);
      }
      
      
      /**
+     * Muokaaan urheilijan tietoja
+     */
+    private void muokkaaUrheilija(int k) {
+         try {
+            Urheilija urheilija;
+            urheilija = TulosMuokkaaUrheilijaController.avaaUrheilija("Muokkaa Urheilija", urheilijaKohdalla.clone(), k);
+            if (urheilija == null) return;
+            rekisteri.korvaaTaiLisaa(urheilija);
+            hae(urheilija.getId());
+        } catch (CloneNotSupportedException e) {
+            System.out.println("Ei osata Kloonata" + e.getMessage());
+        } catch (SailoException e)  {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+     }
+    
+    /**
+     * N‰ytet‰‰n ajat taulukkoon.
+     * Tyhjennet‰‰n ensin tauluko ja sitten lis‰t‰‰n siihen kaikki ajat
+     * @param urheilija , jonka ajat n‰ytet‰‰n
+     */
+    private void naytaAjat(Urheilija urheilija) {
+        tableAika.clear();
+        if(urheilija == null) return;
+        
+        List<Aika> ajat = rekisteri.annaAjat(urheilija,cbMatkat.getSelectedObject());
+        if(ajat.size() == 0) return;
+        for(Aika aika : ajat) {
+            naytaAika(aika);
+        }
+    }
+    
+    
+    /**
+     * Lis‰t‰‰n yhden ajan tiedot taulukkoon
+     * @param aika
+     */
+    private void naytaAika(Aika aika) {
+        int kenttia = aika.getKenttia();
+        String[] rivi = new String[kenttia-aika.ekaKentta()];
+        for(int i = 0, k= aika.ekaKentta(); k < kenttia; i++, k++) {
+            rivi[i] = aika.anna(k);
+        }
+        tableAika.add(aika, rivi);
+    }
+    
+    
+    private void muokkaaAika() {
+        int r = tableAika.getRowNr();
+        if( r < 0) return;
+        Aika aika = tableAika.getObject();
+        if(aika == null) return;
+        int k = tableAika.getColumnNr() + aika.ekaKentta();
+        try {
+            aika = TulosMuokkaaTulosController.avaaTulos("Muokkaa tulos", aika.clone(), k, rekisteri);
+            if(aika == null) return;
+            rekisteri.korvaaTaiLisaa(aika);
+            naytaAjat(urheilijaKohdalla);
+            tableAika.selectRow(r);
+        } catch (CloneNotSupportedException e) {
+            // 
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia lis‰‰misess‰: " + e.getMessage());
+        }
+    }
+     
+     
+     /**
       * Hakee urheilijoiden tiedot listaan
-      * @param urheilijan id numero, joka aktivoidaam haun j‰lkeen
+      * @param urheilijan id numero, joka aktivoidaan haun j‰lkeen
       */
      private void hae(int id) {
-         chooserUrheilija.clear();
-         int index = 0;
-         for (int i = 0; i < rekisteri.getUrheilijaLkm(); i++) {
-             Urheilija urheilija = rekisteri.annaUrheilija(i);
-             if(urheilija.getId() == id) index = i;
-             chooserUrheilija.add(urheilija.getNimi(), urheilija);
+         int nro = id;
+         if (nro <= 0 ) {
+             Urheilija kohdalla = urheilijaKohdalla;
+             if (kohdalla != null) nro = kohdalla.getId();
          }
-         chooserUrheilija.getSelectionModel().select(index);
+         
+         int k = cbHaku.getSelectedIndex() + apuUrheilija.ekaKentta();
+         String ehto = textHaku.getText();
+         if(ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
+         chooserUrheilija.clear();
+         
+         
+         int index = 0;
+         List<Urheilija> urheilijat;
+         try {
+             urheilijat = rekisteri.etsi(ehto, k);
+             int i = 0;
+             for(Urheilija urheilija : urheilijat) {
+                 if(urheilija.getId() == nro) index = i;
+                 chooserUrheilija.add(urheilija.getNimi(), urheilija);
+                 i++;
+             }
+          } catch (SailoException ex ) {
+              Dialogs.showMessageDialog("Urheilija hakemisessa ongelmia! " + ex.getMessage());
+          }
+         chooserUrheilija.setSelectedIndex(index);
      }
      
      
      /**
      * Luo uuden j‰senen, jota aletaan editoimaan
      */
-    public void uusiUrheilija() {
+    private void uusiUrheilija() {
          Urheilija urheilija = new Urheilija();
+         urheilija = TulosMuokkaaUrheilijaController.avaaUrheilija("Uusi urheilija", urheilija, 1);
          urheilija.rekisteroi();
-         urheilija.taytaUrheilijaTiedot();
          rekisteri.lisaa(urheilija);
          hae(urheilija.getId());
      }
@@ -259,10 +408,11 @@ public class TulosGUIController implements Initializable {
      * Luo uuden ajan, jota aletaan editoimaan
      */
     public void uusiAika() {
-        if (urheilijaKohdalla == null) return;
-        Aika aika = new Aika(urheilijaKohdalla.getId());
+        if(chooserUrheilija == null) return;
+        Aika aika = new Aika();
+        aika = TulosMuokkaaTulosController.avaaTulos("Uusi tulos", aika, 1, rekisteri);
         aika.rekisteroi();
-        aika.taytaAikaTiedot();
+        aika.setUrheilija(chooserUrheilija.getSelectedObject().getId());
         rekisteri.lisaa(aika);
         hae(urheilijaKohdalla.getId());
     }

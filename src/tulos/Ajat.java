@@ -37,6 +37,44 @@ public class Ajat implements Iterable<Aika> {
     
     
     /**
+     * Korvaa ajan tietorakenteessa.  Ottaa ajan omistukseensa.
+     * Etsitään samalla id:llä oleva aika.  Jos ei löydy,
+     * niin lisätään uutena aikana.
+     * @param aika lisätäävän ajan viite.
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Ajat ajat = new Ajat();
+     * Aika aika1 = new Aika(), aika2 = new Aika();
+     * aika1.rekisteroi(); aika2.rekisteroi();
+     * ajat.getLkm() === 0;
+     * ajat.korvaaTaiLisaa(aika1); ajat.getLkm() === 1;
+     * ajat.korvaaTaiLisaa(aika2); ajat.getLkm() === 2;
+     * Aika aika3 = aika1.clone();
+     * Iterator<Aika> it = ajat.iterator();
+     * it.next() == aika1 === true;
+     * ajat.korvaaTaiLisaa(aika3); ajat.getLkm() === 2;
+     * it = ajat.iterator();
+     * Aika u0 = it.next();
+     * u0 === aika3;
+     * u0 == aika3 === true;
+     * u0 == aika1 === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Aika aika) {
+        int id = aika.getId();
+        for (int i = 0; i < alkiot.size(); i++) {
+            if ( alkiot.get(i).getId() == id ) {
+                alkiot.set(i, aika);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(aika);
+    }
+    
+    
+    /**
      * Palauttaa alkioiden määrän listassa
      * @return alkioiden määrä listassa
      */
@@ -46,8 +84,9 @@ public class Ajat implements Iterable<Aika> {
     
     
     /**
-     * Haetaan kaikki urheilijan ajat
+     * Haetaan kaikki urheilijan ajat tietyltä matkalta
      * @param urheilijaId urheilijan id, jolla aikoja haetaan
+     * @param matkaId Matkan id, jolla aikoja haetaan
      * @return tietorakenne jossa viiteet löydetteyihin aikoihin
      * @example
      * <pre name="test">
@@ -72,10 +111,16 @@ public class Ajat implements Iterable<Aika> {
      *  loytyneet.get(0) == aika51 === true;
      * </pre> 
      */
-    public List<Aika> annaAjat(int urheilijaId) {
+    public List<Aika> annaAjat(int urheilijaId, int matkaId) {
         List<Aika> loydetyt = new ArrayList<Aika>();
-        for(Aika aika : alkiot) {
-            if(aika.getUrheilijaId() == urheilijaId) loydetyt.add(aika);
+        if(matkaId <= 0) {
+            for(Aika aika : alkiot) {
+                if(aika.getUrheilijaId() == urheilijaId) loydetyt.add(aika);
+            }
+        } else {
+            for(Aika aika : alkiot) {
+                if(aika.getUrheilijaId() == urheilijaId && aika.getMatkaId() == matkaId) loydetyt.add(aika);
+            }
         }
         return loydetyt;
     }
@@ -127,10 +172,10 @@ public class Ajat implements Iterable<Aika> {
      *  ajat.tallenna();
      *  ajat = new Ajat();            // Poistetaan vanhat luomalla uusi
      *  ajat.lueTiedostosta(tiedNimi);  // johon ladataan tiedot tiedostosta.
-     *  //Iterator<Aika> i = ajat.iterator();
-     *  //i.next() === aika1;
-     *  //i.next() === aika2;
-     *  //i.hasNext() === false;
+     *  Iterator<Aika> i = ajat.iterator();
+     *  i.next() === aika1;
+     *  i.next() === aika2;
+     *  i.hasNext() === false;
      *  ajat.lisaa(aika2);
      *  ajat.tallenna();
      *  ftied.delete() === true;
@@ -328,7 +373,7 @@ public class Ajat implements Iterable<Aika> {
 
         System.out.println("============== Ajat testi ==============");
         
-        List<Aika> ajat2 = ajat.annaAjat(1);
+        List<Aika> ajat2 = ajat.annaAjat(1, 2);
 
         for (Aika aika : ajat2) {
             System.out.print(aika.getUrheilijaId() + " ");

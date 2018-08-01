@@ -52,6 +52,11 @@ src/fxTulos/TulosTietojaView.fxml= paneli jossa ohjelman tiedot
 src/fxTulos/TulosVarmistusView.fxml = ikkuna, joka varmistaa tiedon poistamisen
 src/fxTulos/TulosVirheView.fxml = ikkuna, joka ilmoittaa virheellisestä tiedosta
 =
+= <h3>Rekisterin tallennustidostot</h3>
+tulosrekisteri/matkat.dat = Matkojen tallennus
+tulosrekisteri/tulokset.dat = tulosten tallennus
+tulosrekisteri/urheilijat.dat = urheilijoiden tallenus
+=
 = <h3>Muita tiedostoja</h3>
 =
 build.fxbuild

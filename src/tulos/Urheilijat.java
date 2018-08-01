@@ -6,9 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import fi.jyu.mit.ohj2.WildChars;
 
 /**
  * Tulosrekisterin urheilijat, joka osaa mm. lis‰t‰ uuden urheilijan
@@ -51,6 +56,64 @@ public class Urheilijat implements Iterable<Urheilija> {
         alkiot[lkm++] = urheilija;
         muutettu = true;
     }
+    
+    
+    /**
+     * Korvaa urheilijan tietorakenteessa.  Ottaa urheilijan omistukseensa.
+     * Etsit‰‰n samalla id:ll‰ oleva urheilija.  Jos ei lˆydy,
+     * niin lis‰t‰‰n uutena urheilijana.
+     * @param urheilija lis‰t‰‰v‰n urheilijan viite.
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Urheilijat urheilijat = new Urheilijat();
+     * Urheilija vaiski1 = new Urheilija(), vaiski2 = new Urheilija();
+     * vaiski1.rekisteroi(); vaiski2.rekisteroi();
+     * urheilijat.getLkm() === 0;
+     * urheilijat.korvaaTaiLisaa(vaiski1); urheilijat.getLkm() === 1;
+     * urheilijat.korvaaTaiLisaa(vaiski2); urheilijat.getLkm() === 2;
+     * Urheilija vaiski3 = vaiski1.clone();
+     * Iterator<Urheilija> it = urheilijat.iterator();
+     * it.next() == vaiski1 === true;
+     * urheilijat.korvaaTaiLisaa(vaiski3); urheilijat.getLkm() === 2;
+     * it = urheilijat.iterator();
+     * Urheilija u0 = it.next();
+     * u0 === vaiski3;
+     * u0 == vaiski3 === true;
+     * u0 == vaiski1 === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Urheilija urheilija) {
+        int id = urheilija.getId();
+        for (int i = 0; i < lkm; i++) {
+            if ( alkiot[i].getId() == id ) {
+                alkiot[i] = urheilija;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(urheilija);
+    }
+    
+    
+    /**
+    *Palauttaa taulukossa hakuehtoon vastaavien urheilijoiden viitteet
+    * @param hakuehto hakuehto
+    * @param k etsitt‰v‰n kent‰n indeksi
+    * @return tietorakenne lˆytyneist‰ j‰senist‰
+    */
+    public List<Urheilija> etsi(String hakuehto, int k) {
+        String ehto = "*";
+        if (hakuehto != null && hakuehto.length() > 0) ehto = hakuehto;
+        int hk = k;
+        List<Urheilija> loytyneet = new ArrayList<Urheilija>();
+        for(Urheilija urheilija: this) {
+            if(WildChars.onkoSamat(urheilija.anna(hk), ehto)) loytyneet.add(urheilija);
+        }
+        Collections.sort(loytyneet, new Urheilija.Vertailija(hk));
+        return loytyneet;
+    }
+
     
     
     /**
@@ -99,10 +162,10 @@ public class Urheilijat implements Iterable<Urheilija> {
      *  urheilijat.tallenna();
      *  urheilijat = new Urheilijat();            // Poistetaan vanhat luomalla uusi
      *  urheilijat.lueTiedostosta(tiedNimi);  // johon ladataan tiedot tiedostosta.
-     *  //Iterator<Urheilija> i = urheilijat.iterator();
-     *  // i.next().equals(vaiski1) === true;
-     *  //i.next() === vaiski2;
-     *  //i.hasNext() === false;
+     *  Iterator<Urheilija> i = urheilijat.iterator();
+     *  i.next().equals(vaiski1) === true;
+     *  i.next() === vaiski2;
+     *  i.hasNext() === false;
      *  urheilijat.lisaa(vaiski2);
      *  urheilijat.tallenna();
      *  ftied.delete() === true;
@@ -210,6 +273,15 @@ public class Urheilijat implements Iterable<Urheilija> {
         if (i<0 || lkm <= i)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
+    }
+    
+    
+    /**
+     * Palauttaa alkiot taulukon
+     * @return alkiot
+     */
+    public Urheilija[] annaUrheilijat() {
+        return alkiot;
     }
     
     

@@ -13,7 +13,7 @@ import static kanta.SotuTarkistus.*;
  * @version 23.6.2018
  *
  */
-public class Aika {
+public class Aika implements Cloneable{
      
     private int id;
     private int urheilijaId;
@@ -22,6 +22,7 @@ public class Aika {
     private int min;
     private double s;
     private String pvm = "";
+    //private String[] pituudet = new String[] {"100m", "200m", "400m", "800m", "3000m", "5000m", "10000m", "puoli marathon", "marathon"}; 
     
     private static int seuraavaId = 1;
     
@@ -59,6 +60,76 @@ public class Aika {
     
     
     /**
+     * Antaa k:n kentän sisällön merkkijonona
+     * @param k monenenko kentän sisältö palautetaan
+     * @return kentän sisältö merkkijonona
+     */
+    public String anna(int k) {
+        switch ( k ) {
+        case 0: return "" + id;
+        case 1: return "" + urheilijaId;
+        case 2: return "" + matkaId;
+        case 3: return "" + h;
+        case 4: return "" + min;
+        case 5: return "" + s;
+        case 6: return "" + pvm;
+        default: return "Idiootti";
+        }
+    }
+    
+    
+    /**
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param jono jonoa joka asetetaan kentän arvoksi
+     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
+     * @example
+     * <pre name="test">
+     *   Aika aika = new Aika();
+     *   aika.aseta(3,"1") === null;
+     *   aika.aseta(3,"kissa") === "Tuntien oltava numeerinen"
+     *   aika.aseta(4,"030201-1111") === "Tarkistusmerkin kuuluisi olla C"; 
+     *   aika.aseta(5,"030201-111C") === null; 
+     *   aika.aseta(6,"kissa") === "Lisenssin oltava numeerinen";
+     *   aika.aseta(6,"1940") === null;
+     * </pre>
+     */
+    public String aseta(int k, String jono) {
+        String tjono = jono.trim();
+        StringBuilder sb = new StringBuilder(tjono);
+        switch ( k ) {
+        case 0:
+            setId(Mjonot.erota(sb, '§', getId()));
+            return null;
+        case 1:
+            urheilijaId = Mjonot.erota(sb, '§', urheilijaId);
+            return null;
+        case 2:
+            matkaId = Mjonot.erota(sb, '§', matkaId);
+            return null;          
+        case 3:
+            if( !tjono.matches("[0-9]*")) return "Tuntien oltava numeerinen";
+            h = Mjonot.erota(sb, '§', h);
+            return null;
+        case 4:
+            if( !tjono.matches("[0-9]*")) return "Minuuttien oltava numeerinen";
+            min = Mjonot.erota(sb, '§', min);
+            return null;
+        case 5:
+            s = Mjonot.erota(sb, '§', s);
+            return null;
+        case 6: 
+            if(sb.length() < 10) return "Päivänmäärä liian lyhyt";
+            if(sb.charAt(2) != ':' || sb.charAt(5) != ':') return "erota luvut toisistaan kaksoispisteellä";
+            pvm = tjono;
+            return null;
+        default:
+            return "Idiootti";
+        }
+    }
+    
+    
+    /**
      * Lukee ajan tiedot merkkijonosta
      * @param rivi merkkijono, josta luetaan
      * @example
@@ -78,19 +149,14 @@ public class Aika {
      */
     public void parse(String rivi) {
         StringBuilder sb = new StringBuilder(rivi);
-        setId(Mjonot.erota(sb, '|', id));
-        urheilijaId = Mjonot.erota(sb, '|', urheilijaId);
-        matkaId = Mjonot.erota(sb, '|', matkaId);
-        h = Mjonot.erota(sb, '|', h);
-        min = Mjonot.erota(sb, '|', min);
-        s = Mjonot.erota(sb, '|', s);
-        pvm = Mjonot.erota(sb, '|', pvm);
+        for(int k = 0; k < getKenttia(); k++) {
+            aseta(k, Mjonot.erota(sb, '|'));
+        }
     }
     
     
     /**
      * Antaa ajalle seuraavan rekisterinumeron
-     * TODO: PARANNA METODIA TIEDOSTONLUKUA VARTEN!!
      * @example
      * <pre name="test">
      *  Aika aika = new Aika();
@@ -130,6 +196,24 @@ public class Aika {
     
     
     /**
+     * Asettaa matkan id:n
+     * @param id asetettava id
+     */
+    public void setMatka(int id) {
+        matkaId = id;
+    }
+    
+    
+    /**
+     * Asettaa matkan id:n
+     * @param id asetettava id
+     */
+    public void setUrheilija(int id) {
+        urheilijaId = id;
+    }
+    
+    
+    /**
      * Palauttaa urheilijan id:n
      * @return urheilijan id
      */
@@ -144,6 +228,43 @@ public class Aika {
      */
     public int getMatkaId() {
         return matkaId;
+    }
+    
+    
+    /**
+     * Palauttaa kenttien määrän
+     * @return kenttien määrä
+     */
+    public int getKenttia() {
+        return 7;
+    }
+    
+    
+    /**
+     * Palauttaa ensimmäisen kentän, jota käyttäjä voi muokata
+     * @return eka kenttä, jota käyttäjä voi muokata
+     */
+    public int ekaKentta() {
+        return 3;
+    }
+    
+    
+    /**
+     * Palauttaa k:tta urheilijan kenttää vastaavan kysymyksen
+     * @param k kuinka monennen kentän kysymys palautetaan (0-alkuinen)
+     * @return k:netta kenttää vastaava kysymys
+     */
+    public String getKysymys(int k) {
+        switch ( k ) {
+        case 0: return "Id";
+        case 1: return "urheilijaId";
+        case 2: return "matkaId";
+        case 3: return "h";
+        case 4: return "min";
+        case 5: return "s";
+        case 6: return "Päivänmäärä";
+        default: return "Idiootti";
+        }
     }
     
     
@@ -176,7 +297,37 @@ public class Aika {
      */
     @Override
     public String toString() {
-        return id + "|" + urheilijaId + "|" + matkaId + "|" + h + "|" + min + "|" + s + "|" + pvm;  
+        StringBuilder sb = new StringBuilder("");
+        String erotin = "";
+        for( int k = 0; k < getKenttia(); k++) {
+            sb.append(erotin);
+            sb.append(anna(k));
+            erotin = "|";
+        }
+        return sb.toString(); 
+        
+    }
+    
+    
+    /**
+     * Kloonaa urheilijan
+     * @return Object kloonattu urheilija
+     * @example
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException
+     * Urheilija urheilija = new Urheilija();
+     * urheilija.parse(" 3 | vaiski | 241");
+     * Urheilija kopio = urheilija.clone();
+     * kopio.toString() === urheilija.toString();
+     * urheilija.parse("4 | Repe | 432");
+     * kopio.toString().equals(urheilija.toString()) === false
+     * </pre>;
+     */
+    @Override
+    public Aika clone() throws CloneNotSupportedException {
+        Aika uusi;
+        uusi = (Aika) super.clone();
+        return uusi;
         
     }
     

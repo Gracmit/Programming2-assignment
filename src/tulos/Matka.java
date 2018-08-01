@@ -21,7 +21,6 @@ public class Matka {
     
     /**
      * Antaa ajalle seuraavan rekisterinumeron
-     * TODO: PARANNA METODIA TIEDOSTONLUKUA VARTEN!!
      * @example
      * <pre name="test">
      *  Matka matka = new Matka();
@@ -110,6 +109,15 @@ public class Matka {
      */
     public int getId() {
         return id;
+    }
+    
+    
+    /**
+     * Palauttaa juoksumatkan
+     * @return juoksuMatka
+     */
+    public String getMatka() {
+        return juoksuMatka;
     }
     
     
