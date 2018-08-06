@@ -38,17 +38,6 @@ public class TulosMuokkaaUrheilijaController implements ModalControllerInterface
         ModalController.closeStage(labelVirhe);
     }
 
-    @FXML
-    void handlePoista() {
-        boolean vastaus = Dialogs.showQuestionDialog("Poisto?",
-                "Poistetaanko varmasti?", "Kyllä", "Ei");
-        if(vastaus == true ) {
-            Dialogs.showMessageDialog("Poistetaan! Mutta ei osata vielä");
-            ModalController.closeStage(labelVirhe);
-        }
-        else 
-            ModalController.closeStage(labelVirhe);
-    }
     
     @FXML
     void handleTallenna() {
