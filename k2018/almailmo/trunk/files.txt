@@ -35,7 +35,8 @@ src/Tulos/Rekisteri.java = Rekisteri-luokka
 =
 = <h3>Tietokanta - Luokat</h3>
 =
-src/kanta/SotuTarkistus = Luokka sotun tarkastusta varten
+src/kanta/SotuTarkistus.java = Luokka sotun tarkastusta varten
+src/kanta/SisaltaaTarkistaja.java
 =
 = <h3>Käyttöliittymän ulkoasu JavaFX:llä</h3>
 =
