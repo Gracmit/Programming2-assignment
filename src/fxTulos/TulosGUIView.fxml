@@ -57,6 +57,8 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleUusiUrheilija" text="Lisää uusi urheilija" />
                   <MenuItem mnemonicParsing="false" onAction="#handleUusiTulos" text="Lisää uusi tulos" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaUrheilija" text="Muokkaa urheilijaa" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaTulos" text="Muokkaa tulosta" />
                   <MenuItem mnemonicParsing="false" onAction="#handlePoistaUrheilija" text="Poista Urheilija" />
                   <MenuItem mnemonicParsing="false" onAction="#handlePoistaTulos" text="PoistaTulos" />
             </items>
@@ -166,7 +168,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <ComboBoxChooser fx:id="cbMatkat" minWidth="200.0" rivit="100m&#10;200m&#10;400m&#10;800m&#10;3000m&#10;5000m&#10;10000m&#10;puoli marathon&#10;marathon">
+                  <ComboBoxChooser fx:id="cbMatkat" minWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>

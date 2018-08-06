@@ -57,21 +57,28 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Aik
     }
     
     
+    /**
+     *Palauttaa ajan minkä tietoja muokattiin
+     */
     @Override
     public Aika getResult() {
         return aikaKohdalla;
     }
-
+ 
+    
+    /**
+     * Asettaa oletus-ajan, jonka tiedot näytetään
+     */
     @Override
     public void setDefault(Aika aika) {
         aikaKohdalla = aika;
         naytaAika(aikaKohdalla, texts);
-        
-        
-        
     }
     
 
+    /**
+     * Asettaa tietojen muokkauskenttien fokuksen
+     */
     @Override
     public void handleShown() {
         kentta = Math.max(apuAika.ekaKentta(), Math.min(kentta, apuAika.getKenttia()-1));
@@ -80,6 +87,9 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Aik
     }
 
 
+    /**
+     * Alustaa dialogin
+     */
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
@@ -190,6 +200,9 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Aik
     }
     
     
+    /**
+     * Käsittelee muutoksen tuloksen tietoihin
+     */
     private void kasitteleMuutos() {
         aikaKohdalla.setMatka(chooserMatka.getSelectedObject().getId());
     }
@@ -208,6 +221,10 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Aik
     }
     
     
+    /**
+     * Näyttää virheen muokkausikkunassa
+     * @param virhe virhe teksti
+     */
     private void naytaVirhe(String virhe) {
         if( virhe == null || virhe.isEmpty() ) {
             labelVirhe.setText("");

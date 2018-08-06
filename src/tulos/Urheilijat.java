@@ -96,6 +96,37 @@ public class Urheilijat implements Iterable<Urheilija> {
     }
     
     
+   /**
+    * Poistaa urheilijan jolla on valittu tunnusnumero  
+    * @param id poistettavan urheilijan id numero 
+    * @return 1 jos poistettiin, 0 jos ei löydy 
+    * @example 
+    * <pre name="test"> 
+    * #THROWS SailoException  
+    * Urheilijat urheilijat = new Urheilijat(); 
+    * Urheilija vaiski1 = new Urheilija(), vaiski2 = new Urheilija(), vaiski3 = new Urheilija(); 
+    * vaiski1.rekisteroi(); vaiski2.rekisteroi(); vaiski3.rekisteroi(); 
+    * int id1 = vaiski1.getId(); 
+    * urheilijat.lisaa(vaiski1); urheilijat.lisaa(vaiski2); urheilijat.lisaa(vaiski3); 
+    * urheilijat.poista(id1+1) === 1; 
+    * urheilijat.annaId(id1+1) === null; urheilijat.getLkm() === 2; 
+    * urheilijat.poista(id1) === 1; urheilijat.getLkm() === 1; 
+    * urheilijat.poista(id1+3) === 0; urheilijat.getLkm() === 1; 
+    * </pre> 
+    *  
+    */ 
+   public int poista(int id) { 
+       int ind = etsiId(id); 
+       if (ind < 0) return 0; 
+       lkm--; 
+       for (int i = ind; i < lkm; i++) 
+           alkiot[i] = alkiot[i + 1]; 
+       alkiot[lkm] = null; 
+       muutettu = true; 
+       return 1; 
+   }
+    
+    
     /**
     *Palauttaa taulukossa hakuehtoon vastaavien urheilijoiden viitteet
     * @param hakuehto hakuehto
@@ -163,15 +194,15 @@ public class Urheilijat implements Iterable<Urheilija> {
      *  urheilijat = new Urheilijat();            // Poistetaan vanhat luomalla uusi
      *  urheilijat.lueTiedostosta(tiedNimi);  // johon ladataan tiedot tiedostosta.
      *  Iterator<Urheilija> i = urheilijat.iterator();
-     *  i.next().equals(vaiski1) === true;
+     *  i.next() === vaiski1; 
      *  i.next() === vaiski2;
      *  i.hasNext() === false;
      *  urheilijat.lisaa(vaiski2);
      *  urheilijat.tallenna();
      *  ftied.delete() === true;
      *  File fbak = new File(tiedNimi+".bak");
-     *  fbak.delete() === true;
-     *  dir.delete() === true;
+     *  fbak.delete();
+     *  dir.delete();
      * </pre>
      */
     public void lueTiedostosta(String tied) throws SailoException {
@@ -264,7 +295,7 @@ public class Urheilijat implements Iterable<Urheilija> {
     
     
     /**
-     * Palauttaa viitteen i:teen urheilijaan. Väliaikainen!
+     * Palauttaa viitteen i:teen urheilijaan.
      * @param i monennenko urheilijan viite halutaan
      * @return viite urheilijaan, jonka indeksi on i
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
@@ -282,6 +313,52 @@ public class Urheilijat implements Iterable<Urheilija> {
      */
     public Urheilija[] annaUrheilijat() {
         return alkiot;
+    }
+    
+    
+    /** 
+     * Etsii urheilijan id:n perusteella 
+     * @param id tunnusnumero, jonka mukaan etsitään 
+     * @return löytyneen urheilijan indeksi tai -1 jos ei löydy 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Urheilijat urheilijat = new Urheilijat(); 
+     * Urheilija vaiski1 = new Urheilija(), vaiski2 = new Urheilija(), vaiski3 = new Urheilija(); 
+     * vaiski1.rekisteroi(); vaiski2.rekisteroi(); vaiski3.rekisteroi(); 
+     * int id1 = vaiski1.getId(); 
+     * urheilijat.lisaa(vaiski1); urheilijat.lisaa(vaiski2); urheilijat.lisaa(vaiski3); 
+     * urheilijat.etsiId(id1+1) === 1; 
+     * urheilijat.etsiId(id1+2) === 2; 
+     * </pre> 
+     */ 
+    public int etsiId(int id) { 
+        for (int i = 0; i < lkm; i++) 
+            if (id == alkiot[i].getId()) return i; 
+        return -1; 
+    }
+    
+    
+    /** 
+     * Etsii urheilijan id:n perusteella 
+     * @param id tunnusnumero, jonka mukaan etsitään 
+     * @return urheilija jolla etsittävä id tai null 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Urheilijat urheilijat = new Urheilijat(); 
+     * Urheilija vaiski1 = new Urheilija(), vaiski2 = new Urheilija(), vaiski3 = new Urheilija(); 
+     * vaiski1.rekisteroi(); vaiski2.rekisteroi(); vaiski3.rekisteroi(); 
+     * int id1 = vaiski1.getId(); 
+     * urheilijat.lisaa(vaiski1); urheilijat.lisaa(vaiski2); urheilijat.lisaa(vaiski3); 
+     * urheilijat.annaId(id1  ) == vaiski1 === true; 
+     * urheilijat.annaId(id1+1) == vaiski2 === true; 
+     * urheilijat.annaId(id1+2) == vaiski3 === true; 
+     * </pre> 
+     */ 
+    public Urheilija annaId(int id) { 
+        for (Urheilija urheilija : this) { 
+            if (id == urheilija.getId()) return urheilija; 
+        } 
+        return null; 
     }
     
     

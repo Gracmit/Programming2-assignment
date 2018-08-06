@@ -36,7 +36,7 @@ public class Urheilija implements Cloneable{
      */
     public void taytaUrheilijaTiedot() {
         this.nimi = "Väiski Vemmelsääri " + rand(1000, 9999);
-        this.sotu = "121212-1212";
+        this.sotu = "111111-111C";
         this.seura = "JKU";
         this.lisenssi = "123456";
         this.puhelin = "0404040404";
@@ -301,6 +301,10 @@ public class Urheilija implements Cloneable{
             this.k = k;
         }
         
+        
+        /**
+         * Vertaa urheilijaa toiseen urheilijaan
+         */
         @Override
         public int compare(Urheilija u1, Urheilija u2) {
             return u1.getAvain(k).compareToIgnoreCase(u2.getAvain(k));
@@ -347,11 +351,6 @@ public class Urheilija implements Cloneable{
         
     }
     
-    
-//    @Override
-//    public int compareTo(Urheilija urheilija) {
-//        return getNimi().compareToIgnoreCase(urheilija.getNimi());
-//    }
 
     /**
      * @param args ei käytössä

@@ -57,6 +57,8 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleUusiUrheilija" text="Lisää uusi urheilija" />
                   <MenuItem mnemonicParsing="false" onAction="#handleUusiTulos" text="Lisää uusi tulos" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaUrheilija" text="Muokkaa urheilijaa" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaTulos" text="Muokkaa tulosta" />
                   <MenuItem mnemonicParsing="false" onAction="#handlePoistaUrheilija" text="Poista Urheilija" />
                   <MenuItem mnemonicParsing="false" onAction="#handlePoistaTulos" text="PoistaTulos" />
             </items>
@@ -76,7 +78,7 @@
             <VBox BorderPane.alignment="TOP_CENTER">
                <children>
                   <Label text="Label" />
-                  <ListChooser fx:id="chooserUrheilija" onMouseClicked="#handleMuokkaaUrheilija" rivit="Meikäläinen Matti&#10;Bolt Usain&#10;Farah Mo&#10;" />
+                  <ListChooser fx:id="chooserUrheilija" rivit="Meikäläinen Matti&#10;Bolt Usain&#10;Farah Mo&#10;" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -93,13 +95,13 @@
                   </Label>
                </top>
                <center>
-                  <ComboBoxChooser prefWidth="200.0" rivit="nimi&#10;seura&#10;lisenssi" BorderPane.alignment="CENTER">
+                  <ComboBoxChooser fx:id="cbHaku" prefWidth="200.0" onAction="#handleHaku" rivit="nimi&#10;seura&#10;lisenssi" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets bottom="5.0" />
                      </BorderPane.margin></ComboBoxChooser>
                </center>
                <bottom>
-                  <TextField fx:id="texthaku" onKeyReleased="#handleHaku" BorderPane.alignment="CENTER" />
+                  <TextField fx:id="textHaku" onKeyReleased="#handleHaku" BorderPane.alignment="CENTER" />
                </bottom>
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -120,7 +122,7 @@
          <center>
             <ScrollPane fx:id="panelUrheilija" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
-                  <GridPane hgap="5.0">
+                  <GridPane fx:id="gridUrheilija" hgap="5.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="56.80004882812501" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.5999755859375" minWidth="10.0" prefWidth="195.199951171875" />
@@ -166,7 +168,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <ComboBoxChooser minWidth="200.0" rivit="100m&#10;200m&#10;400m&#10;800m&#10;3000m&#10;5000m&#10;10000m&#10;puoli marathon&#10;marathon">
+                  <ComboBoxChooser fx:id="cbMatkat" minWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
@@ -175,7 +177,7 @@
             </VBox>
          </top>
          <center>
-            <StringGrid onMouseClicked="#handleMuokkaaTulos" rivit="Tulokset | Päivämäärä &#10;10.31 | 21.12.2017 &#10;9.99 | 13.04,2018 &#10;" BorderPane.alignment="CENTER">
+            <StringGrid fx:id="tableAika" onMouseClicked="#handleMuokkaaTulos" rivit="Tulokset | Päivämäärä &#10;10.31 | 21.12.2017 &#10;9.99 | 13.04,2018 &#10;" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </BorderPane.margin>
