@@ -129,6 +129,78 @@ public class Rekisteri {
     
     
     /**
+     * Poistaa urheilijoista ja ajoista urheilijan tiedot 
+     * @param urheilija urheilija joka poistetaan
+     * @return montako urheilijaa poistettiin
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     *   Rekisteri rek = new Rekisteri();
+     *   Urheilija vaiski1 = new Urheilija(); vaiski1.taytaUrheilijaTiedot(); vaiski1.rekisteroi();
+     *   Urheilija vaiski2 = new Urheilija(); vaiski2.taytaUrheilijaTiedot(); vaiski2.rekisteroi();
+     *   int uid1 = vaiski1.getId();
+     *   int uid2 = vaiski2.getId();
+     *   Aika aika21 = new Aika(uid2); aika21.taytaAikaTiedot();
+     *   Aika aika11 = new Aika(uid1); aika11.taytaAikaTiedot();
+     *   Aika aika22 = new Aika(uid2); aika22.taytaAikaTiedot(); 
+     *   Aika aika12 = new Aika(uid1); aika12.taytaAikaTiedot(); 
+     *   Aika aika23 = new Aika(uid2); aika23.taytaAikaTiedot();
+     *   rek.lisaa(vaiski1);
+     *   rek.lisaa(vaiski2);
+     *   rek.lisaa(aika21);
+     *   rek.lisaa(aika11);
+     *   rek.lisaa(aika22);
+     *   rek.lisaa(aika12);
+     *   rek.lisaa(aika23);
+     *   rek.etsi("*",0).size() === 2;
+     *   rek.annaAjat(vaiski1.getId()).size() === 2;
+     *   rek.poista(vaiski1) === 1;
+     *   rek.etsi("*",0).size() === 1;
+     *   rek.annaAjat(vaiski1.getId()).size() === 0;
+     *   rek.annaAjat(vaiski2.getId()).size() === 3;
+     * </pre>
+     */
+    public int poista(Urheilija urheilija) {
+        if ( urheilija == null ) return 0;
+        int ret = urheilijat.poista(urheilija.getId()); 
+        ajat.poista(urheilija.getId()); 
+        return ret; 
+    }
+    
+    
+    /** 
+     * Poistaa tämän ajan
+     * @param aika poistettava aika
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     *   Rekisteri rek = new Rekisteri();
+     *   Urheilija vaiski1 = new Urheilija(); vaiski1.taytaUrheilijaTiedot(); vaiski1.rekisteroi();
+     *   Urheilija vaiski2 = new Urheilija(); vaiski2.taytaUrheilijaTiedot(); vaiski2.rekisteroi();
+     *   int uid1 = vaiski1.getId();
+     *   int uid2 = vaiski2.getId();
+     *   Aika aika21 = new Aika(uid2); aika21.taytaAikaTiedot();
+     *   Aika aika11 = new Aika(uid1); aika11.taytaAikaTiedot();
+     *   Aika aika22 = new Aika(uid2); aika22.taytaAikaTiedot(); 
+     *   Aika aika12 = new Aika(uid1); aika12.taytaAikaTiedot(); 
+     *   Aika aika23 = new Aika(uid2); aika23.taytaAikaTiedot();
+     *   rek.lisaa(vaiski1);
+     *   rek.lisaa(vaiski2);
+     *   rek.lisaa(aika21);
+     *   rek.lisaa(aika11);
+     *   rek.lisaa(aika22);
+     *   rek.lisaa(aika12);
+     *   rek.lisaa(aika23);
+     *   rek.annaAjat(vaiski1.getId()).size() === 2;
+     *   rek.poistaAika(aika11);
+     *   rek.annaAjat(vaiski1.getId()).size() === 1;
+     */ 
+    public void poistaAika(Aika aika) { 
+        ajat.poista(aika); 
+    }
+    
+    
+    /**
      * Palauttaa kaikki matkat listassa
      * @return matkat listassa
      */
@@ -257,12 +329,14 @@ public class Rekisteri {
             ajat.tallenna();
         } catch (SailoException ex) {
             virhe = ex.getMessage();
+            System.out.println(virhe);
         }
         
         try {
             matkat.tallenna();
         } catch (SailoException ex) {
             virhe = ex.getMessage();
+            System.out.println(virhe);
         }
     }
     

@@ -120,12 +120,12 @@ public class TulosGUIController implements Initializable {
     
     @FXML
     void handlePoistaUrheilija() {
-        poista();
+        poistaUrheilija();
     }
     
     @FXML
     void handlePoistaTulos() {
-        poista();
+        poistaTulos();
     }
     
     
@@ -188,7 +188,8 @@ public class TulosGUIController implements Initializable {
      * @return Alustettu ComboBoxChooser
      */
     public ComboBoxChooser<Matka> alustaMatkat(ComboBoxChooser<Matka> cb) {
-        cb.clear();
+        cbMatkat.clear();
+        
         List<Matka> matkat = rekisteri.getMatkat();
         for(int i = 0; i < rekisteri.getMatkaLkm(); i++) {
             cb.add(matkat.get(i).getMatka(), matkat.get(i));
@@ -206,12 +207,12 @@ public class TulosGUIController implements Initializable {
     private String lueTiedosto(String nimi) {
         try {
             rekisteri.lueTiedostosta(nimi);
-            hae(0);
             cbMatkat = alustaMatkat(cbMatkat);
+            hae(0);
             return null;
         } catch (SailoException e) {
-            hae(0);
             cbMatkat = alustaMatkat(cbMatkat);
+            hae(0);
             String virhe = e.getMessage();
             if (virhe != null) Dialogs.showMessageDialog(virhe);
             return virhe;
@@ -244,15 +245,31 @@ public class TulosGUIController implements Initializable {
      
      
      /**
-      * Poistetaan tietoja
+      * Poistetaan urheilijan tiedot
       */
-     private void poista() {
-         boolean vastaus = Dialogs.showQuestionDialog("Poisto?",
-                 "Poistetaanko varmasti?", "Kyllä", "Ei");
-         if(vastaus == true ) {
-             Dialogs.showMessageDialog("Poistetaan! Mutta ei osata vielä");
-         }
+     private void poistaUrheilija() {
+         if (urheilijaKohdalla == null) return;
+         if (!Dialogs.showQuestionDialog("Poisto?", "Poistetaanko varmasti?", "Kyllä", "Ei")) return;
+         rekisteri.poista(urheilijaKohdalla);
+         int index = chooserUrheilija.getSelectedIndex();
+         hae(0);
+         chooserUrheilija.setSelectedIndex(index);    
      }
+     
+     
+     /**
+     * Poistetaan tulos
+     */
+    public void poistaTulos() {
+        if (!Dialogs.showQuestionDialog("Poisto?", "Poistetaanko varmasti?", "Kyllä", "Ei")) return;
+         Aika aika = tableAika.getObject();
+         if(aika == null) return; 
+         int rivi = tableAika.getRowNr();
+         rekisteri.poistaAika(aika);
+         naytaAjat(urheilijaKohdalla);
+         tableAika.selectRow(rivi);
+     }
+     
      
      /**
      * Tarkistetaan onko tallennus tehty
@@ -273,8 +290,10 @@ public class TulosGUIController implements Initializable {
               URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2018k/ht/almailmo");
               desktop.browse(uri);
           } catch (URISyntaxException e) {
+              Dialogs.showMessageDialog("Ongelmia apu-ikkunan avauksessa " + e.getMessage());
               return;
           } catch (IOException e) {
+              Dialogs.showMessageDialog("Ongelmia apu-ikkunan avauksessa " + e.getMessage());
               return;
           }
      }
@@ -287,6 +306,7 @@ public class TulosGUIController implements Initializable {
          urheilijaKohdalla = chooserUrheilija.getSelectedObject();
          TulosMuokkaaUrheilijaController.naytaUrheilija(urheilijaKohdalla, texts);
          naytaAjat(urheilijaKohdalla);
+
      }
      
      
@@ -301,9 +321,9 @@ public class TulosGUIController implements Initializable {
             rekisteri.korvaaTaiLisaa(urheilija);
             hae(urheilija.getId());
         } catch (CloneNotSupportedException e) {
-            System.out.println("Ei osata Kloonata" + e.getMessage());
+            Dialogs.showMessageDialog("Ongelmia kloonauksessa " + e.getMessage());
         } catch (SailoException e)  {
-            Dialogs.showMessageDialog(e.getMessage());
+            Dialogs.showMessageDialog("Ongelmia muokkauksessa " + e.getMessage());
         }
      }
     
@@ -316,7 +336,7 @@ public class TulosGUIController implements Initializable {
         tableAika.clear();
         if(urheilija == null) return;
         
-        List<Aika> ajat = rekisteri.annaAjat(urheilija,cbMatkat.getSelectedObject());
+        List<Aika> ajat = rekisteri.annaAjat(urheilija, cbMatkat.getSelectedObject());
         if(ajat.size() == 0) return;
         for(Aika aika : ajat) {
             naytaAika(aika);
@@ -337,7 +357,9 @@ public class TulosGUIController implements Initializable {
         tableAika.add(aika, rivi);
     }
     
-    
+    /**
+     * Muokataan urheilijan tulosta
+     */
     private void muokkaaAika() {
         int r = tableAika.getRowNr();
         if( r < 0) return;
@@ -351,7 +373,7 @@ public class TulosGUIController implements Initializable {
             naytaAjat(urheilijaKohdalla);
             tableAika.selectRow(r);
         } catch (CloneNotSupportedException e) {
-            // 
+            Dialogs.showMessageDialog("Ongelmia lisäämisessä (Kloonauksessa): " + e.getMessage());
         } catch (SailoException e) {
             Dialogs.showMessageDialog("Ongelmia lisäämisessä: " + e.getMessage());
         }
@@ -374,7 +396,6 @@ public class TulosGUIController implements Initializable {
          if(ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
          chooserUrheilija.clear();
          
-         
          int index = 0;
          List<Urheilija> urheilijat;
          try {
@@ -385,9 +406,9 @@ public class TulosGUIController implements Initializable {
                  chooserUrheilija.add(urheilija.getNimi(), urheilija);
                  i++;
              }
-          } catch (SailoException ex ) {
-              Dialogs.showMessageDialog("Urheilija hakemisessa ongelmia! " + ex.getMessage());
-          }
+         } catch (SailoException ex ) {
+             Dialogs.showMessageDialog("Urheilija hakemisessa ongelmia! " + ex.getMessage());
+         }
          chooserUrheilija.setSelectedIndex(index);
      }
      

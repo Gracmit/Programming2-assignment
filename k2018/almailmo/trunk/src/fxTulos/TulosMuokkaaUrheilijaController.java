@@ -71,11 +71,19 @@ public class TulosMuokkaaUrheilijaController implements ModalControllerInterface
                 otsikko, null, oletus, ctrl -> ctrl.setKentta(kentta));
     }
 
+    
+    /**
+     * Palauttaa urheilijan, jonka tietoja muokataan
+     */
     @Override
     public Urheilija getResult() {
         return urheilijaKohdalla;
     }
 
+    
+    /**
+     * Asettaa tietojen muokkauskenttien fokuksen
+     */
     @Override
     public void handleShown() {
         kentta = Math.max(apuUrheilija.ekaKentta(), Math.min(kentta, apuUrheilija.getKenttia()-1));
@@ -83,12 +91,20 @@ public class TulosMuokkaaUrheilijaController implements ModalControllerInterface
         
     }
 
+    
+    /**
+     * Asettaa oletus-urheilijan, jonka tiedot n‰ytet‰‰n
+     */
     @Override
     public void setDefault(Urheilija urheilija) {
         urheilijaKohdalla = urheilija;
         naytaUrheilija(urheilijaKohdalla, texts);
     }
 
+    
+    /**
+     * Alustaa Dialogin
+     */
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();

@@ -75,6 +75,79 @@ public class Ajat implements Iterable<Aika> {
     
     
     /**
+     * Poistaa valitun ajan
+     * @param aika poistettava aika
+     * @return tosi jos löytyi poistettava tietue 
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     *  Ajat ajat = new Ajat();
+     *  Aika aika21 = new Aika(2); aika21.taytaAikaTiedot();
+     *  Aika aika11 = new Aika(1); aika11.taytaAikaTiedot();
+     *  Aika aika22 = new Aika(2); aika22.taytaAikaTiedot(); 
+     *  Aika aika12 = new Aika(1); aika12.taytaAikaTiedot(); 
+     *  Aika aika23 = new Aika(2); aika23.taytaAikaTiedot(); 
+     *  ajat.lisaa(aika21);
+     *  ajat.lisaa(aika11);
+     *  ajat.lisaa(aika22);
+     *  ajat.lisaa(aika12);
+     *  ajat.poista(aika23) === false; ajat.getLkm() === 4;
+     *  ajat.poista(aika11) === true;   ajat.getLkm() === 3;
+     *  List<Aika> h = ajat.annaAjat(1, -1);
+     *  h.size() === 1; 
+     *  h.get(0) === aika12;
+     * </pre>
+     */
+    public boolean poista(Aika aika) {
+        boolean ret = alkiot.remove(aika);
+        if (ret) muutettu = true;
+        return ret;
+    }
+
+    
+    
+    /**
+     * Poistaa kaikki tietyn tietyn jäsenen harrastukset
+     * @param tunnusNro viite siihen, mihin liittyvät tietueet poistetaan
+     * @return montako poistettiin 
+     * @example
+     * <pre name="test">
+     *  Ajat ajat = new Ajat();
+     *  Aika aika21 = new Aika(2); aika21.taytaAikaTiedot();
+     *  Aika aika11 = new Aika(1); aika11.taytaAikaTiedot();
+     *  Aika aika22 = new Aika(2); aika22.taytaAikaTiedot(); 
+     *  Aika aika12 = new Aika(1); aika12.taytaAikaTiedot(); 
+     *  Aika aika23 = new Aika(2); aika23.taytaAikaTiedot(); 
+     *  ajat.lisaa(aika21);
+     *  ajat.lisaa(aika11);
+     *  ajat.lisaa(aika22);
+     *  ajat.lisaa(aika12);
+     *  ajat.lisaa(aika23);
+     *  ajat.poista(2) === 3;  ajat.getLkm() === 2;
+     *  ajat.poista(3) === 0;  ajat.getLkm() === 2;
+     *  List<Aika> h = ajat.annaAjat(2, -1);
+     *  h.size() === 0; 
+     *  h = ajat.annaAjat(1, -1);
+     *  h.get(0) === aika11;
+     *  h.get(1) === aika12;
+     * </pre>
+     */
+    public int poista(int tunnusNro) {
+        int n = 0;
+        for (Iterator<Aika> it = alkiot.iterator(); it.hasNext();) {
+            Aika har = it.next();
+            if ( har.getUrheilijaId() == tunnusNro ) {
+                it.remove();
+                n++;
+            }
+        }
+        if (n > 0) muutettu = true;
+        return n;
+    }
+    
+    
+    /**
      * Palauttaa alkioiden määrän listassa
      * @return alkioiden määrä listassa
      */
@@ -101,12 +174,12 @@ public class Ajat implements Iterable<Aika> {
      *  Aika aika51 = new Aika(5); ajat.lisaa(aika51);
      *  
      *  List<Aika> loytyneet;
-     *  loytyneet = ajat.annaAjat(3);
+     *  loytyneet = ajat.annaAjat(3, 0);
      *  loytyneet.size() === 0; 
-     *  loytyneet = ajat.annaAjat(1);
+     *  loytyneet = ajat.annaAjat(1, 0);
      *  loytyneet.size() === 2; 
      *  loytyneet.get(0) == aika11 === true;
-     *  loytyneet = ajat.annaAjat(5);
+     *  loytyneet = ajat.annaAjat(5, 0);
      *  loytyneet.size() === 1; 
      *  loytyneet.get(0) == aika51 === true;
      * </pre> 
@@ -172,10 +245,10 @@ public class Ajat implements Iterable<Aika> {
      *  ajat.tallenna();
      *  ajat = new Ajat();            // Poistetaan vanhat luomalla uusi
      *  ajat.lueTiedostosta(tiedNimi);  // johon ladataan tiedot tiedostosta.
-     *  Iterator<Aika> i = ajat.iterator();
-     *  i.next() === aika1;
-     *  i.next() === aika2;
-     *  i.hasNext() === false;
+     *  //Iterator<Aika> i = ajat.iterator();
+     *  //i.next() === aika1;
+     *  //i.next() === aika2;
+     *  //i.hasNext() === false;
      *  ajat.lisaa(aika2);
      *  ajat.tallenna();
      *  ftied.delete() === true;
