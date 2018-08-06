@@ -36,20 +36,9 @@ public class TulosMuokkaaTulosController implements ModalControllerInterface<Aik
     
     @FXML
     void handlePeruuta() {
-        ModalController.closeStage(textNimi);
+        ModalController.closeStage(labelVirhe);
     }
 
-    @FXML
-    void handlePoista() {
-        boolean vastaus = Dialogs.showQuestionDialog("Poisto?",
-                "Poistetaanko varmasti?", "Kyllä", "Ei");
-        if(vastaus == true ) {
-            Dialogs.showMessageDialog("Poistetaan! Mutta ei osata vielä");
-            ModalController.closeStage(textNimi);
-        }
-        else 
-            ModalController.closeStage(textNimi);
-    }
     
     @FXML
     void handleTallenna() {
